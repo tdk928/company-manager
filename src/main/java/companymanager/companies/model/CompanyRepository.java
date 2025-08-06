@@ -1,4 +1,4 @@
-package companymanager;
+package companymanager.companies.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
