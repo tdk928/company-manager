@@ -2,10 +2,10 @@
 server:
   port: 8080
 
-# Database Configuration (PostgreSQL)
+# Database Configuration (Docker PostgreSQL - Railway compatible)
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/market_mind
+    url: jdbc:postgresql://localhost:19210/market_mind
     username: tdk
     password: tdk
     driver-class-name: org.postgresql.Driver
