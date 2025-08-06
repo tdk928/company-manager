@@ -1,4 +1,4 @@
-package com.company.companymanager.controller;
+package companymanager.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
