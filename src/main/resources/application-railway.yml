@@ -1,0 +1,28 @@
+# Railway PostgreSQL Configuration Profile
+# ACTUAL RAILWAY VALUES (confirmed by user)
+spring:
+  datasource:
+    url: jdbc:postgresql://yamabiko.proxy.rlwy.net:39604/railway?sslmode=require
+    username: postgres
+    password: BokcxluFKfWCwzxhdLOIDUzMWjqjeWtw
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        connection:
+          charSet: UTF-8
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+# Logging Configuration
+logging:
+  level:
+    companymanager: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
