@@ -1,0 +1,36 @@
+# Railway PostgreSQL Configuration
+# Uses Railway environment variables for database connection
+
+# Server Configuration
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DATABASE_PUBLIC_URL:jdbc:postgresql://yamabiko.proxy.rlwy.net:39604/railway}?sslmode=require
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:BokcxluFKfWCwzxhdLOIDUzMWjqjeWtw}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        connection:
+          charSet: UTF-8
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  application:
+    name: company-manager
+
+# Logging Configuration
+logging:
+  level:
+    companymanager: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
