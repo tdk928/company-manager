@@ -1,5 +1,10 @@
 # Railway PostgreSQL Configuration Profile
 # ACTUAL RAILWAY VALUES (confirmed by user)
+
+# Server Configuration
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://yamabiko.proxy.rlwy.net:39604/railway?sslmode=require
