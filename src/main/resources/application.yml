@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: ${DATABASE_PUBLIC_URL:jdbc:postgresql://yamabiko.proxy.rlwy.net:39604/railway}?sslmode=require
+    url: jdbc:${DATABASE_PUBLIC_URL:postgresql://postgres:BokcxluFKfWCwzxhdLOIDUzMWjqjeWtw@yamabiko.proxy.rlwy.net:39604/railway}?sslmode=require
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:BokcxluFKfWCwzxhdLOIDUzMWjqjeWtw}
     driver-class-name: org.postgresql.Driver
