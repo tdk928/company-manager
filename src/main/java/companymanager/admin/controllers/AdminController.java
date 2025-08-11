@@ -2,7 +2,7 @@ package companymanager.admin.controllers;
 
 import companymanager.admin.entities.User;
 import companymanager.admin.services.UserService;
-
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +17,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/admin/users")
 @CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class AdminController {
     
     private final UserService userService;
-    
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
     
     /**
      * GET - Retrieve all users

@@ -2,7 +2,7 @@ package companymanager.admin.services;
 
 import companymanager.admin.entities.User;
 import companymanager.admin.models.UserRepository;
-
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +12,10 @@ import java.util.Optional;
  * Service class for User business logic
  */
 @Service
+@AllArgsConstructor
 public class UserService {
     
     private final UserRepository userRepository;
-    
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
     
     /**
      * Get all users
