@@ -37,6 +37,7 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
     "egn": "1234567890"
 }
 ```
+- **Response includes role**: All newly created users automatically get the "admin" role
 
 #### **Get All Users** `GET /api/admin/users`
 - No request body needed

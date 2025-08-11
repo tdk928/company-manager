@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * User entity representing administrative users in the system
  */
@@ -38,6 +41,10 @@ public class User {
     @Column(name = "egn", nullable = false, unique = true)
     @JsonProperty("egn")
     private String egn;
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "user_id")
+    private UserRole userRole;
     
     /**
      * Validate the user entity and throw custom exceptions if validation fails

@@ -3,7 +3,10 @@ package companymanager.admin.services;
 import companymanager.admin.models.CreateUserRequest;
 import companymanager.admin.models.UpdateUserRequest;
 import companymanager.admin.models.UserDto;
+import companymanager.admin.entities.Role;
 import companymanager.admin.entities.User;
+import companymanager.admin.entities.UserRole;
+import companymanager.admin.models.RoleRepository;
 import companymanager.admin.models.UserRepository;
 import companymanager.exception.CustomResponseStatusException;
 import companymanager.exception.ErrorCode;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class UserService {
     
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     
     /**
      * Get all users
@@ -100,7 +104,22 @@ public class UserService {
         }
         
         User savedUser = userRepository.save(user);
-        log.info("Successfully created user with ID: {} and EGN: {}", savedUser.getId(), savedUser.getEgn());
+        
+        // Automatically assign admin role to the new user
+        Role adminRole = roleRepository.findByName("admin")
+                .orElseThrow(() -> {
+                    log.error("Admin role not found in the system");
+                    return new CustomResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR100);
+                });
+        
+        UserRole userRole = new UserRole();
+        userRole.setUserId(savedUser.getId());
+        userRole.setRoleId(adminRole.getId());
+        
+        // Set the userRole in the user entity
+        savedUser.setUserRole(userRole);
+        
+        log.info("Successfully created user with ID: {} and EGN: {}, assigned admin role", savedUser.getId(), savedUser.getEgn());
         
         return convertToDto(savedUser);
     }
@@ -201,10 +220,33 @@ public class UserService {
      * @return UserDto
      */
     private UserDto convertToDto(User user) {
+        RoleDto roleDto = null;
+        if (user.getUserRole() != null) {
+            // Get the role from the userRole relationship
+            Role role = roleRepository.findById(user.getUserRole().getRoleId()).orElse(null);
+            if (role != null) {
+                roleDto = convertRoleToDto(role);
+            }
+        }
+        
         return new UserDto(
                 user.getFirstName(),
                 user.getSecondName(),
-                user.getLastName()
+                user.getLastName(),
+                roleDto
+        );
+    }
+    
+    /**
+     * Convert Role entity to RoleDto
+     * @param role the role entity
+     * @return RoleDto
+     */
+    private RoleDto convertRoleToDto(Role role) {
+        return new RoleDto(
+                role.getId(),
+                role.getName(),
+                role.getDescription()
         );
     }
 }

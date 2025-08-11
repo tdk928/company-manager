@@ -34,7 +34,7 @@
 								"users"
 							]
 						},
-						"description": "Create a new user with valid data. Returns UserDto (firstName, secondName, lastName only)"
+						"description": "Create a new user with valid data. Returns UserDto with firstName, secondName, lastName and automatically assigned admin role"
 					},
 					"response": []
 				},
