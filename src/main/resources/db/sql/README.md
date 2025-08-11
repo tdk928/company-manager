@@ -32,6 +32,12 @@ Creates the `companies` table for storing company information with the following
 ### `insert_companies.sql`
 Inserts multiple companies: Kaufland (EIK: 131129282), Lidl (EIK: 131071587), and Billa (EIK: 130007884)
 
+### `setup_companies_complete.sql`
+Complete setup script that creates the companies table and inserts all companies in one go
+
+### `troubleshoot_companies.sql`
+Troubleshooting script to identify issues with the companies table setup
+
 ## Table Constraints
 
 ### Users Table
@@ -65,3 +71,29 @@ mysql -u username -p database_name < create_user_table.sql
 - The `valid_from` field is automatically set to the current date when creating a company
 - The `valid_to` field is initially null and can be used for company lifecycle management
 - All scripts use `IF NOT EXISTS` and `IF EXISTS` clauses for safe execution
+
+## 🔧 Troubleshooting
+
+If the company insert script doesn't work, follow these steps:
+
+### **Step 1: Run the troubleshooting script**
+```bash
+psql -U username -d database_name -f troubleshoot_companies.sql
+```
+
+### **Step 2: Check the output**
+- **Table exists**: Should show `true`
+- **Table structure**: Should show all required columns
+- **Permissions**: Should show INSERT privileges for your user
+
+### **Step 3: Use the complete setup script**
+If there are issues, run the complete setup:
+```bash
+psql -U username -d database_name -f setup_companies_complete.sql
+```
+
+### **Common Issues:**
+1. **Table doesn't exist**: Run `create_companies_table.sql` first
+2. **Wrong database**: Make sure you're connected to the right database
+3. **Permission denied**: Check if your user has INSERT privileges
+4. **Syntax errors**: Ensure you're using PostgreSQL (not MySQL)
