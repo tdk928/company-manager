@@ -33,6 +33,11 @@ public enum ErrorCode {
     ERR028("Company not found with id: {0}"),
     ERR029("Company with EIK {0} not found"),
     
+    // Company additional validation errors
+    ERR030("Company email is required"),
+    ERR031("Company email format is invalid"),
+    ERR032("Company phone is required"),
+    
     // Generic errors
     ERR100("Internal server error"),
     ERR101("Invalid request data"),

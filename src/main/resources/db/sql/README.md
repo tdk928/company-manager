@@ -24,8 +24,19 @@ Creates the `companies` table for storing company information with the following
 - `name` - Required, maximum 50 characters
 - `eik` - Required, exactly 9 numeric digits, unique (Bulgarian company identifier)
 - `address` - Required, maximum 50 characters
+- `email` - Required, valid email format
+- `phone` - Required, company contact phone number
 - `valid_from` - Required, automatically set to current date when creating
 - `valid_to` - Optional, null when creating (for future use in company lifecycle management)
+
+### `insert_kaufland.sql`
+Inserts Kaufland company data with EIK 131129282
+
+### `insert_lidl.sql`
+Inserts Lidl company data with EIK 131071587
+
+### `insert_billa.sql`
+Inserts Billa company data with EIK 130007884
 
 ## Table Constraints
 
@@ -38,6 +49,8 @@ Creates the `companies` table for storing company information with the following
 ### Companies Table
 - Length validation for name and address fields (max 50 characters)
 - EIK format validation (exactly 9 digits)
+- Email format validation (standard email regex pattern)
+- Phone field validation (required, no format restrictions)
 - Unique constraint on EIK field
 - Indexes on EIK, name, and valid_from for performance
 - Automatic valid_from date setting (current date)

@@ -20,6 +20,8 @@ public class CompanyDto {
     private String name;
     private String eik;
     private String address;
+    private String email;
+    private String phone;
     private LocalDate validFrom;
     private LocalDate validTo;
 }

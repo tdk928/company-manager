@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS companies (
     name VARCHAR(50) NOT NULL,
     eik VARCHAR(9) NOT NULL UNIQUE,
     address VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
     valid_from DATE NOT NULL DEFAULT CURRENT_DATE,
     valid_to DATE
 );

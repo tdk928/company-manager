@@ -88,7 +88,9 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 {
     "name": "TechCorp Solutions Ltd",
     "eik": "123456789",
-    "address": "123 Tech Street, Sofia, Bulgaria"
+    "address": "123 Tech Street, Sofia, Bulgaria",
+    "email": "info@techcorp.bg",
+    "phone": "+359 2 123 4567"
 }
 ```
 - **Response includes**: All company details with automatically set `validFrom` date
@@ -108,7 +110,9 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 {
     "name": "Updated TechCorp Solutions Ltd",
     "eik": "123456789",
-    "address": "456 Updated Street, Sofia, Bulgaria"
+    "address": "456 Updated Street, Sofia, Bulgaria",
+    "email": "updated@techcorp.bg",
+    "phone": "+359 2 987 6543"
 }
 ```
 
@@ -133,6 +137,8 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 - `name`: Required, max 50 characters
 - `eik`: Required, exactly 9 numeric digits (Bulgarian company identifier)
 - `address`: Required, max 50 characters
+- `email`: Required, valid email format
+- `phone`: Required, company contact phone number
 
 ### **Test Invalid Data:**
 Try these to test validation errors:

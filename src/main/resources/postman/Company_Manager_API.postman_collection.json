@@ -295,7 +295,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"123 Tech Street, Sofia, Bulgaria\"\n}"
+							"raw": "{\n    \"name\": \"TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"123 Tech Street, Sofia, Bulgaria\",\n    \"email\": \"info@techcorp.bg\",\n    \"phone\": \"+359 2 123 4567\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/companies",
@@ -383,7 +383,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Updated TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"456 Updated Street, Sofia, Bulgaria\"\n}"
+							"raw": "{\n    \"name\": \"Updated TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"456 Updated Street, Sofia, Bulgaria\",\n    \"email\": \"updated@techcorp.bg\",\n    \"phone\": \"+359 2 987 6543\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/companies/1",

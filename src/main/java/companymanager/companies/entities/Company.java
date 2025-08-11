@@ -35,6 +35,12 @@ public class Company {
     @Column(name = "address", nullable = false, length = 50)
     private String address;
     
+    @Column(name = "email", nullable = false)
+    private String email;
+    
+    @Column(name = "phone", nullable = false)
+    private String phone;
+    
     @Column(name = "valid_from", nullable = false)
     private LocalDate validFrom;
     
@@ -59,6 +65,8 @@ public class Company {
         validateName();
         validateEik();
         validateAddress();
+        validateEmail();
+        validatePhone();
     }
     
     /**
@@ -120,6 +128,43 @@ public class Company {
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.ERR026,
                 "Company address cannot exceed 50 characters"
+            );
+        }
+    }
+    
+    /**
+     * Validate company email
+     * @throws CustomResponseStatusException if email is invalid
+     */
+    private void validateEmail() {
+        if (email == null || email.trim().isEmpty()) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR030,
+                "Company email is required"
+            );
+        }
+        // Email regex pattern for validation
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if (!email.matches(emailRegex)) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR031,
+                "Company email format is invalid"
+            );
+        }
+    }
+    
+    /**
+     * Validate company phone
+     * @throws CustomResponseStatusException if phone is invalid
+     */
+    private void validatePhone() {
+        if (phone == null || phone.trim().isEmpty()) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR032,
+                "Company phone is required"
             );
         }
     }

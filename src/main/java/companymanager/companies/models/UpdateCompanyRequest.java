@@ -17,4 +17,6 @@ public class UpdateCompanyRequest {
     private String name;
     private String eik;
     private String address;
+    private String email;
+    private String phone;
 }

@@ -88,6 +88,8 @@ public class CompanyService {
                 .name(request.getName())
                 .eik(request.getEik())
                 .address(request.getAddress())
+                .email(request.getEmail())
+                .phone(request.getPhone())
                 .build();
         
         // Validate company data
@@ -135,6 +137,8 @@ public class CompanyService {
                 .name(request.getName())
                 .eik(request.getEik())
                 .address(request.getAddress())
+                .email(request.getEmail())
+                .phone(request.getPhone())
                 .build();
         
         // Validate updated company data
@@ -155,6 +159,8 @@ public class CompanyService {
         existingCompany.setName(companyDetails.getName());
         existingCompany.setEik(companyDetails.getEik());
         existingCompany.setAddress(companyDetails.getAddress());
+        existingCompany.setEmail(companyDetails.getEmail());
+        existingCompany.setPhone(companyDetails.getPhone());
         
         // Save updated company
         Company updatedCompany = companyRepository.save(existingCompany);
@@ -224,6 +230,8 @@ public class CompanyService {
                 .name(company.getName())
                 .eik(company.getEik())
                 .address(company.getAddress())
+                .email(company.getEmail())
+                .phone(company.getPhone())
                 .validFrom(company.getValidFrom())
                 .validTo(company.getValidTo())
                 .build();
