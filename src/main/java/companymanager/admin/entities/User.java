@@ -2,6 +2,7 @@ package companymanager.admin.entities;
 
 import companymanager.exception.CustomResponseStatusException;
 import companymanager.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,15 +24,19 @@ public class User {
     private Long id;
     
     @Column(name = "first_name", nullable = false)
+    @JsonProperty("firstName")
     private String firstName;
     
     @Column(name = "second_name")
+    @JsonProperty("secondName")
     private String secondName;
     
     @Column(name = "last_name", nullable = false)
+    @JsonProperty("lastName")
     private String lastName;
     
     @Column(name = "egn", nullable = false, unique = true)
+    @JsonProperty("egn")
     private String egn;
     
     /**

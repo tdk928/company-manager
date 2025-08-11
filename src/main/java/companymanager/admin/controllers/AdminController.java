@@ -65,11 +65,19 @@ public class AdminController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
+            // Debug logging to see what we received
+            System.out.println("Received user: " + user);
+            System.out.println("firstName: " + (user != null ? user.getFirstName() : "null"));
+            System.out.println("lastName: " + (user != null ? user.getLastName() : "null"));
+            System.out.println("egn: " + (user != null ? user.getEgn() : "null"));
+            
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (CustomResponseStatusException e) {
             throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
         } catch (Exception e) {
+            System.err.println("Exception in createUser: " + e.getClass().getSimpleName() + ": " + e.getMessage());
+            e.printStackTrace();
             throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101);
         }
     }
