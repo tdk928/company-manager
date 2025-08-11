@@ -1,8 +1,8 @@
 package companymanager.admin.services;
 
-import companymanager.admin.dto.CreateUserRequest;
-import companymanager.admin.dto.UpdateUserRequest;
-import companymanager.admin.dto.UserDto;
+import companymanager.admin.models.CreateUserRequest;
+import companymanager.admin.models.UpdateUserRequest;
+import companymanager.admin.models.UserDto;
 import companymanager.admin.entities.User;
 import companymanager.admin.models.UserRepository;
 import companymanager.exception.CustomResponseStatusException;

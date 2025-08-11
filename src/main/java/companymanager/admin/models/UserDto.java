@@ -1,4 +1,4 @@
-package companymanager.admin.dto;
+package companymanager.admin.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

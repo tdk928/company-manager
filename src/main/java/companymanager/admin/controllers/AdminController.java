@@ -1,8 +1,8 @@
 package companymanager.admin.controllers;
 
-import companymanager.admin.dto.CreateUserRequest;
-import companymanager.admin.dto.UpdateUserRequest;
-import companymanager.admin.dto.UserDto;
+import companymanager.admin.models.CreateUserRequest;
+import companymanager.admin.models.UpdateUserRequest;
+import companymanager.admin.models.UserDto;
 import companymanager.admin.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

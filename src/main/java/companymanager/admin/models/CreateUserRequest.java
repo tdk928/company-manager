@@ -1,16 +1,16 @@
-package companymanager.admin.dto;
+package companymanager.admin.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for updating existing users
+ * DTO for creating new users
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateUserRequest {
+public class CreateUserRequest {
     
     private String firstName;
     private String secondName;
