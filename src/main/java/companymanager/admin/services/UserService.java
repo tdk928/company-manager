@@ -3,6 +3,7 @@ package companymanager.admin.services;
 import companymanager.admin.models.CreateUserRequest;
 import companymanager.admin.models.UpdateUserRequest;
 import companymanager.admin.models.UserDto;
+import companymanager.admin.models.RoleDto;
 import companymanager.admin.entities.Role;
 import companymanager.admin.entities.User;
 import companymanager.admin.models.RoleRepository;
@@ -86,12 +87,13 @@ public class UserService {
         log.info("Creating new user with firstName: {}, lastName: {}, EGN: {}", 
                 request.getFirstName(), request.getLastName(), request.getEgn());
         
-        // Convert request to User entity
-        User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setSecondName(request.getSecondName());
-        user.setLastName(request.getLastName());
-        user.setEgn(request.getEgn());
+        // Convert request to User entity using builder
+        User user = User.builder()
+                .firstName(request.getFirstName())
+                .secondName(request.getSecondName())
+                .lastName(request.getLastName())
+                .egn(request.getEgn())
+                .build();
         
         // Validate user data
         user.validate();
@@ -134,12 +136,13 @@ public class UserService {
                     return new CustomResponseStatusException(HttpStatus.NOT_FOUND, ErrorCode.ERR010, id);
                 });
         
-        // Convert request to User entity for validation
-        User userDetails = new User();
-        userDetails.setFirstName(request.getFirstName());
-        userDetails.setSecondName(request.getSecondName());
-        userDetails.setLastName(request.getLastName());
-        userDetails.setEgn(request.getEgn());
+        // Convert request to User entity for validation using builder
+        User userDetails = User.builder()
+                .firstName(request.getFirstName())
+                .secondName(request.getSecondName())
+                .lastName(request.getLastName())
+                .egn(request.getEgn())
+                .build();
         
         // Validate updated user data
         userDetails.validate();
@@ -220,12 +223,12 @@ public class UserService {
             roleDto = convertRoleToDto(user.getRole());
         }
         
-        return new UserDto(
-                user.getFirstName(),
-                user.getSecondName(),
-                user.getLastName(),
-                roleDto
-        );
+        return UserDto.builder()
+                .firstName(user.getFirstName())
+                .secondName(user.getSecondName())
+                .lastName(user.getLastName())
+                .role(roleDto)
+                .build();
     }
     
     /**
@@ -234,10 +237,10 @@ public class UserService {
      * @return RoleDto
      */
     private RoleDto convertRoleToDto(Role role) {
-        return new RoleDto(
-                role.getId(),
-                role.getName(),
-                role.getDescription()
-        );
+        return RoleDto.builder()
+                .id(role.getId())
+                .name(role.getName())
+                .description(role.getDescription())
+                .build();
     }
 }
