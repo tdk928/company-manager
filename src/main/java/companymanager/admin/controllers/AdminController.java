@@ -1,9 +1,9 @@
 package companymanager.admin.controllers;
 
-import companymanager.admin.entities.User;
+import companymanager.admin.dto.CreateUserRequest;
+import companymanager.admin.dto.UpdateUserRequest;
+import companymanager.admin.dto.UserDto;
 import companymanager.admin.services.UserService;
-import companymanager.exception.CustomResponseStatusException;
-import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +28,8 @@ public class AdminController {
      * @return List of all users
      */
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
     
@@ -39,8 +39,8 @@ public class AdminController {
      * @return User if found, 404 if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        Optional<UserDto> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -51,53 +51,33 @@ public class AdminController {
      * @return User if found, 404 if not found
      */
     @GetMapping("/egn/{egn}")
-    public ResponseEntity<User> getUserByEgn(@PathVariable String egn) {
-        Optional<User> user = userService.getUserByEgn(egn);
+    public ResponseEntity<UserDto> getUserByEgn(@PathVariable String egn) {
+        Optional<UserDto> user = userService.getUserByEgn(egn);
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
     
     /**
      * POST - Create a new user
-     * @param user the user to create
+     * @param request the user creation request
      * @return Created user with 201 status
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            // Debug logging to see what we received
-            System.out.println("Received user: " + user);
-            System.out.println("firstName: " + (user != null ? user.getFirstName() : "null"));
-            System.out.println("lastName: " + (user != null ? user.getLastName() : "null"));
-            System.out.println("egn: " + (user != null ? user.getEgn() : "null"));
-            
-            User createdUser = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (CustomResponseStatusException e) {
-            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
-        } catch (Exception e) {
-            System.err.println("Exception in createUser: " + e.getClass().getSimpleName() + ": " + e.getMessage());
-            e.printStackTrace();
-            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101);
-        }
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
+        UserDto createdUser = userService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
     
     /**
      * PUT - Update an existing user
      * @param id the user ID
-     * @param userDetails the updated user details
+     * @param request the update request
      * @return Updated user if successful, 404 if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        try {
-            User updatedUser = userService.updateUser(id, userDetails);
-            return ResponseEntity.ok(updatedUser);
-        } catch (CustomResponseStatusException e) {
-            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
-        } catch (Exception e) {
-            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101);
-        }
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
+        UserDto updatedUser = userService.updateUser(id, request);
+        return ResponseEntity.ok(updatedUser);
     }
     
     /**
@@ -107,14 +87,8 @@ public class AdminController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        } catch (CustomResponseStatusException e) {
-            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
-        } catch (Exception e) {
-            throw new CustomResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR100);
-        }
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
     
     /**
@@ -123,8 +97,8 @@ public class AdminController {
      * @return List of users with matching first name
      */
     @GetMapping("/search/firstname")
-    public ResponseEntity<List<User>> searchUsersByFirstName(@RequestParam String firstName) {
-        List<User> users = userService.searchUsersByFirstName(firstName);
+    public ResponseEntity<List<UserDto>> searchUsersByFirstName(@RequestParam String firstName) {
+        List<UserDto> users = userService.searchUsersByFirstName(firstName);
         return ResponseEntity.ok(users);
     }
     
@@ -134,8 +108,8 @@ public class AdminController {
      * @return List of users with matching last name
      */
     @GetMapping("/search/lastname")
-    public ResponseEntity<List<User>> searchUsersByLastName(@RequestParam String lastName) {
-        List<User> users = userService.searchUsersByLastName(lastName);
+    public ResponseEntity<List<UserDto>> searchUsersByLastName(@RequestParam String lastName) {
+        List<UserDto> users = userService.searchUsersByLastName(lastName);
         return ResponseEntity.ok(users);
     }
 }
