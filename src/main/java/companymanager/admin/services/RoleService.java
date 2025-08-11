@@ -78,9 +78,7 @@ public class RoleService {
         return new RoleDto(
                 role.getId(),
                 role.getName(),
-                role.getDescription(),
-                role.getCreatedAt(),
-                role.getUpdatedAt()
+                role.getDescription()
         );
     }
 }
