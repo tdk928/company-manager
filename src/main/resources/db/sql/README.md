@@ -29,14 +29,8 @@ Creates the `companies` table for storing company information with the following
 - `valid_from` - Required, automatically set to current date when creating
 - `valid_to` - Optional, null when creating (for future use in company lifecycle management)
 
-### `insert_kaufland.sql`
-Inserts Kaufland company data with EIK 131129282
-
-### `insert_lidl.sql`
-Inserts Lidl company data with EIK 131071587
-
-### `insert_billa.sql`
-Inserts Billa company data with EIK 130007884
+### `insert_companies.sql`
+Inserts multiple companies: Kaufland (EIK: 131129282), Lidl (EIK: 131071587), and Billa (EIK: 130007884)
 
 ## Table Constraints
 
