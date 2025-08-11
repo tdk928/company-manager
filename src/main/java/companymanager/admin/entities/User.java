@@ -1,10 +1,12 @@
 package companymanager.admin.entities;
 
+import companymanager.exception.CustomResponseStatusException;
+import companymanager.exception.ErrorCode;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * User entity representing administrative users in the system
@@ -20,22 +22,61 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "First name is required")
-    @Size(max = 30, message = "First name cannot exceed 30 characters")
     @Column(name = "first_name", nullable = false)
     private String firstName;
     
-    @Size(max = 30, message = "Second name cannot exceed 30 characters")
     @Column(name = "second_name")
     private String secondName;
     
-    @NotBlank(message = "Last name is required")
-    @Size(max = 30, message = "Last name cannot exceed 30 characters")
     @Column(name = "last_name", nullable = false)
     private String lastName;
     
-    @NotBlank(message = "EGN is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "EGN must be exactly 10 digits")
     @Column(name = "egn", nullable = false, unique = true)
     private String egn;
+    
+    /**
+     * Validate the user entity and throw custom exceptions if validation fails
+     */
+    public void validate() {
+        validateFirstName();
+        validateSecondName();
+        validateLastName();
+        validateEgn();
+    }
+    
+    private void validateFirstName() {
+        if (firstName == null || firstName.trim().isEmpty()) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR002);
+        }
+        if (firstName.length() > 30) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR001);
+        }
+    }
+    
+    private void validateSecondName() {
+        if (secondName != null && secondName.length() > 30) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR003);
+        }
+    }
+    
+    private void validateLastName() {
+        if (lastName == null || lastName.trim().isEmpty()) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR005);
+        }
+        if (lastName.length() > 30) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR004);
+        }
+    }
+    
+    private void validateEgn() {
+        if (egn == null || egn.trim().isEmpty()) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR006);
+        }
+        if (egn.length() != 10) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR007);
+        }
+        if (!egn.matches("^[0-9]+$")) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR008);
+        }
+    }
 }

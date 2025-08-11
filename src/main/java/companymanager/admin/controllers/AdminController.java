@@ -2,12 +2,13 @@ package companymanager.admin.controllers;
 
 import companymanager.admin.entities.User;
 import companymanager.admin.services.UserService;
+import companymanager.exception.CustomResponseStatusException;
+import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,12 +63,14 @@ public class AdminController {
      * @return Created user with 201 status
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+        } catch (CustomResponseStatusException e) {
+            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
+        } catch (Exception e) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101);
         }
     }
     
@@ -78,15 +81,14 @@ public class AdminController {
      * @return Updated user if successful, 404 if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         try {
             User updatedUser = userService.updateUser(id, userDetails);
             return ResponseEntity.ok(updatedUser);
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not found")) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.badRequest().build();
+        } catch (CustomResponseStatusException e) {
+            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
+        } catch (Exception e) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101);
         }
     }
     
@@ -100,8 +102,10 @@ public class AdminController {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+        } catch (CustomResponseStatusException e) {
+            throw e; // Re-throw custom exceptions to be handled by GlobalExceptionHandler
+        } catch (Exception e) {
+            throw new CustomResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR100);
         }
     }
     

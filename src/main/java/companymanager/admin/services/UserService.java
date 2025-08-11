@@ -2,7 +2,10 @@ package companymanager.admin.services;
 
 import companymanager.admin.entities.User;
 import companymanager.admin.models.UserRepository;
+import companymanager.exception.CustomResponseStatusException;
+import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,9 +52,12 @@ public class UserService {
      * @return the created user
      */
     public User createUser(User user) {
+        // Validate user data
+        user.validate();
+        
         // Check if EGN already exists
         if (userRepository.existsByEgn(user.getEgn())) {
-            throw new RuntimeException("User with EGN " + user.getEgn() + " already exists");
+            throw new CustomResponseStatusException(HttpStatus.CONFLICT, ErrorCode.ERR009, user.getEgn());
         }
         return userRepository.save(user);
     }
@@ -64,12 +70,15 @@ public class UserService {
      */
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new CustomResponseStatusException(HttpStatus.NOT_FOUND, ErrorCode.ERR010, id));
+        
+        // Validate updated user data
+        userDetails.validate();
         
         // Check if EGN is being changed and if the new EGN already exists
         if (!user.getEgn().equals(userDetails.getEgn()) && 
             userRepository.existsByEgn(userDetails.getEgn())) {
-            throw new RuntimeException("User with EGN " + userDetails.getEgn() + " already exists");
+            throw new CustomResponseStatusException(HttpStatus.CONFLICT, ErrorCode.ERR009, userDetails.getEgn());
         }
         
         user.setFirstName(userDetails.getFirstName());
@@ -86,7 +95,7 @@ public class UserService {
      */
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new CustomResponseStatusException(HttpStatus.NOT_FOUND, ErrorCode.ERR010, id));
         userRepository.delete(user);
     }
     
