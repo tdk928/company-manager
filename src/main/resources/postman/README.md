@@ -174,3 +174,5 @@ The system comes with three predefined roles:
 3. **anonymous** - Anonymous user with minimal access
 
 These roles are automatically created when you run the `create_roles_table.sql` script.
+
+**Note**: All users are automatically assigned the "admin" role when created. The role is stored directly in the users table via a `role_id` foreign key.

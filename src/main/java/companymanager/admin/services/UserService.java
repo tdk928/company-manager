@@ -5,7 +5,6 @@ import companymanager.admin.models.UpdateUserRequest;
 import companymanager.admin.models.UserDto;
 import companymanager.admin.entities.Role;
 import companymanager.admin.entities.User;
-import companymanager.admin.entities.UserRole;
 import companymanager.admin.models.RoleRepository;
 import companymanager.admin.models.UserRepository;
 import companymanager.exception.CustomResponseStatusException;
@@ -103,8 +102,6 @@ public class UserService {
             throw new CustomResponseStatusException(HttpStatus.CONFLICT, ErrorCode.ERR009, user.getEgn());
         }
         
-        User savedUser = userRepository.save(user);
-        
         // Automatically assign admin role to the new user
         Role adminRole = roleRepository.findByName("admin")
                 .orElseThrow(() -> {
@@ -112,12 +109,10 @@ public class UserService {
                     return new CustomResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.ERR100);
                 });
         
-        UserRole userRole = new UserRole();
-        userRole.setUserId(savedUser.getId());
-        userRole.setRoleId(adminRole.getId());
+        // Set the admin role directly
+        user.setRole(adminRole);
         
-        // Set the userRole in the user entity
-        savedUser.setUserRole(userRole);
+        User savedUser = userRepository.save(user);
         
         log.info("Successfully created user with ID: {} and EGN: {}, assigned admin role", savedUser.getId(), savedUser.getEgn());
         
@@ -221,12 +216,8 @@ public class UserService {
      */
     private UserDto convertToDto(User user) {
         RoleDto roleDto = null;
-        if (user.getUserRole() != null) {
-            // Get the role from the userRole relationship
-            Role role = roleRepository.findById(user.getUserRole().getRoleId()).orElse(null);
-            if (role != null) {
-                roleDto = convertRoleToDto(role);
-            }
+        if (user.getRole() != null) {
+            roleDto = convertRoleToDto(user.getRole());
         }
         
         return new UserDto(
