@@ -80,6 +80,47 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 #### **Get Role by Name** `GET /api/admin/roles/name/{name}`
 - Replace `{name}` with role name: `admin`, `company`, or `anonymous`
 
+### **Company Management**
+
+#### **Create Company** `POST /api/companies`
+- **Valid Request Body Example:**
+```json
+{
+    "name": "TechCorp Solutions Ltd",
+    "eik": "123456789",
+    "address": "123 Tech Street, Sofia, Bulgaria"
+}
+```
+- **Response includes**: All company details with automatically set `validFrom` date
+
+#### **Get All Companies** `GET /api/companies`
+- No request body needed
+
+#### **Get Company by ID** `GET /api/companies/{id}`
+- Replace `{id}` with actual company ID (e.g., `1`)
+
+#### **Get Company by EIK** `GET /api/companies/eik/{eik}`
+- Replace `{eik}` with actual EIK (e.g., `123456789`)
+
+#### **Update Company** `PUT /api/companies/{id}`
+- **Request Body Example:**
+```json
+{
+    "name": "Updated TechCorp Solutions Ltd",
+    "eik": "123456789",
+    "address": "456 Updated Street, Sofia, Bulgaria"
+}
+```
+
+#### **Delete Company** `DELETE /api/companies/{id}`
+- Replace `{id}` with actual company ID
+
+#### **Search Companies by Name** `GET /api/companies/search/name?name=TechCorp`
+- Query parameter: `name`
+
+#### **Search Companies by Address** `GET /api/companies/search/address?address=Sofia`
+- Query parameter: `address`
+
 ## ✅ Testing Validations
 
 ### **Valid User Data:**
@@ -87,6 +128,11 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 - `secondName`: Optional, max 30 characters
 - `lastName`: Required, max 30 characters
 - `egn`: Required, exactly 10 numeric digits
+
+### **Valid Company Data:**
+- `name`: Required, max 50 characters
+- `eik`: Required, exactly 9 numeric digits (Bulgarian company identifier)
+- `address`: Required, max 50 characters
 
 ### **Test Invalid Data:**
 Try these to test validation errors:
@@ -97,6 +143,15 @@ Try these to test validation errors:
     "firstName": "ThisIsAVeryLongFirstNameThatExceedsThirtyCharacters",
     "lastName": "Doe",
     "egn": "1234567890"
+}
+```
+
+#### **Invalid Company Data:**
+```json
+{
+    "name": "ThisIsAVeryLongCompanyNameThatExceedsFiftyCharactersAndShouldFailValidation",
+    "eik": "12345",
+    "address": "ThisIsAVeryLongCompanyAddressThatExceedsFiftyCharactersAndShouldFailValidation"
 }
 ```
 **Expected Error:** ERR001 - "First name cannot exceed 30 characters"

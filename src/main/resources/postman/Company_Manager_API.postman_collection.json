@@ -279,6 +279,203 @@
 				}
 			],
 			"description": "Role management operations for system roles"
+		},
+		{
+			"name": "Company Management",
+			"item": [
+				{
+					"name": "Create Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"123 Tech Street, Sofia, Bulgaria\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/companies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies"
+							]
+						},
+						"description": "Create a new company with valid data. Returns CompanyDto with all company details including automatically set validFrom date"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies"
+							]
+						},
+						"description": "Retrieve all companies"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"1"
+							]
+						},
+						"description": "Get company by ID (replace 1 with actual company ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company by EIK",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/eik/123456789",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"eik",
+								"123456789"
+							]
+						},
+						"description": "Get company by EIK (replace 123456789 with actual EIK)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Company",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated TechCorp Solutions Ltd\",\n    \"eik\": \"123456789\",\n    \"address\": \"456 Updated Street, Sofia, Bulgaria\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"1"
+							]
+						},
+						"description": "Update an existing company (replace 1 with actual company ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Company",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"1"
+							]
+						},
+						"description": "Delete a company by ID (replace 1 with actual company ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Companies by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/search/name?name=TechCorp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"search",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "TechCorp"
+								}
+							]
+						},
+						"description": "Search companies by name (replace 'TechCorp' with search term)"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Companies by Address",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/search/address?address=Sofia",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"search",
+								"address"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "Sofia"
+								}
+							]
+						},
+						"description": "Search companies by address (replace 'Sofia' with search term)"
+					},
+					"response": []
+				}
+			],
+			"description": "Company management operations for CRUD operations on companies"
 		}
 	],
 	"event": [
