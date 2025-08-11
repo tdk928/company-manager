@@ -67,6 +67,18 @@ The collection uses a variable `{{baseUrl}}` which is set to `http://localhost:8
 #### **Search Users by Last Name** `GET /api/admin/users/search/lastname?lastName=Doe`
 - Query parameter: `lastName`
 
+### **Role Management**
+
+#### **Get All Roles** `GET /api/admin/roles`
+- No request body needed
+- Returns all available system roles
+
+#### **Get Role by ID** `GET /api/admin/roles/{id}`
+- Replace `{id}` with actual role ID (e.g., `1`)
+
+#### **Get Role by Name** `GET /api/admin/roles/name/{name}`
+- Replace `{name}` with role name: `admin`, `company`, or `anonymous`
+
 ## ✅ Testing Validations
 
 ### **Valid User Data:**
@@ -151,3 +163,13 @@ All errors follow this structure:
 - **Validation happens** at the entity level before database operations
 - **All endpoints return** consistent error response format
 - **Search endpoints** are case-insensitive and support partial matches
+
+## 🏷️ Predefined Roles
+
+The system comes with three predefined roles:
+
+1. **admin** - Administrator with full system access
+2. **company** - Company user with limited access  
+3. **anonymous** - Anonymous user with minimal access
+
+These roles are automatically created when you run the `create_roles_table.sql` script.

@@ -210,6 +210,75 @@
 				}
 			],
 			"description": "User management operations including CRUD operations and search functionality"
+		},
+		{
+			"name": "Role Management",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/roles",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"roles"
+							]
+						},
+						"description": "Retrieve all available roles in the system"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Role by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/roles/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"roles",
+								"1"
+							]
+						},
+						"description": "Get role by ID (replace 1 with actual role ID)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Role by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/roles/name/admin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"roles",
+								"name",
+								"admin"
+							]
+						},
+						"description": "Get role by name (admin, company, or anonymous)"
+					},
+					"response": []
+				}
+			],
+			"description": "Role management operations for system roles"
 		}
 	],
 	"event": [
