@@ -98,8 +98,8 @@ public class CompanyService {
             log.error("Company with EIK {} already exists", company.getEik());
             throw new CustomResponseStatusException(
                 HttpStatus.CONFLICT,
-                ErrorCode.ERR018,
-                ErrorCode.ERR018.getFormattedMessage(company.getEik())
+                ErrorCode.ERR027,
+                ErrorCode.ERR027.getFormattedMessage(company.getEik())
             );
         }
         
@@ -125,8 +125,8 @@ public class CompanyService {
                     log.error("Company not found with ID: {}", id);
                     throw new CustomResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        ErrorCode.ERR019,
-                        ErrorCode.ERR019.getFormattedMessage(id)
+                        ErrorCode.ERR028,
+                        ErrorCode.ERR028.getFormattedMessage(id)
                     );
                 });
         
@@ -146,8 +146,8 @@ public class CompanyService {
             log.error("Company with EIK {} already exists", companyDetails.getEik());
             throw new CustomResponseStatusException(
                 HttpStatus.CONFLICT,
-                ErrorCode.ERR018,
-                ErrorCode.ERR018.getFormattedMessage(companyDetails.getEik())
+                ErrorCode.ERR027,
+                ErrorCode.ERR027.getFormattedMessage(companyDetails.getEik())
             );
         }
         
@@ -174,8 +174,8 @@ public class CompanyService {
             log.error("Company not found with ID: {}", id);
             throw new CustomResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                ErrorCode.ERR019,
-                ErrorCode.ERR019.getFormattedMessage(id)
+                ErrorCode.ERR028,
+                ErrorCode.ERR028.getFormattedMessage(id)
             );
         }
         

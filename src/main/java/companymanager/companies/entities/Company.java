@@ -69,14 +69,14 @@ public class Company {
         if (name == null || name.trim().isEmpty()) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR012,
+                ErrorCode.ERR021,
                 "Company name is required"
             );
         }
         if (name.length() > 50) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR013,
+                ErrorCode.ERR022,
                 "Company name cannot exceed 50 characters"
             );
         }
@@ -90,14 +90,14 @@ public class Company {
         if (eik == null || eik.trim().isEmpty()) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR014,
+                ErrorCode.ERR023,
                 "EIK is required"
             );
         }
         if (!eik.matches("\\d{9}")) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR015,
+                ErrorCode.ERR024,
                 "EIK must be exactly 9 digits"
             );
         }
@@ -111,14 +111,14 @@ public class Company {
         if (address == null || address.trim().isEmpty()) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR016,
+                ErrorCode.ERR025,
                 "Company address is required"
             );
         }
         if (address.length() > 50) {
             throw new CustomResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.ERR017,
+                ErrorCode.ERR026,
                 "Company address cannot exceed 50 characters"
             );
         }
