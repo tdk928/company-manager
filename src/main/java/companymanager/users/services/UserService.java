@@ -15,6 +15,7 @@ import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,9 @@ public class UserService {
     /**
      * Register a new user
      * @param request the user registration request
-     * @return the created user DTO
+     * @return true if registration successful, false otherwise
      */
-    public UserDto registerUser(RegisterRequest request) {
+    public boolean registerUser(RegisterRequest request) {
         log.info("Registering new user with firstName: {}, lastName: {}, EGN: {}", 
                 request.getFirstName(), request.getLastName(), request.getEgn());
         
@@ -58,7 +59,7 @@ public class UserService {
         // Check if EGN already exists
         if (userRepository.existsByEgn(user.getEgn())) {
             log.error("Failed to register user: EGN {} already exists", user.getEgn());
-            throw new CustomResponseStatusException(HttpStatus.CONFLICT, ErrorCode.ERR009, user.getEgn());
+            throw new CustomResponseStatusException(HttpStatus.CONFLICT, ErrorCode.ERR009, ErrorCode.ERR009.getFormattedMessage(user.getEgn()));
         }
         
         // Automatically assign 'user' role to the new registered user
@@ -75,7 +76,7 @@ public class UserService {
         
         log.info("Successfully registered user with ID: {} and EGN: {}, assigned user role", savedUser.getId(), savedUser.getEgn());
         
-        return convertToDto(savedUser);
+        return true;
     }
     
     /**

@@ -1,7 +1,7 @@
 package companymanager.admin.controllers;
 
-import companymanager.admin.models.RoleDto;
-import companymanager.admin.services.RoleService;
+import companymanager.users.models.RoleDto;
+import companymanager.users.services.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/admin/roles")
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class RoleController {
     

@@ -1,8 +1,8 @@
-package companymanager.admin.services;
+package companymanager.users.services;
 
-import companymanager.admin.entities.Role;
-import companymanager.admin.models.RoleDto;
-import companymanager.admin.models.RoleRepository;
+import companymanager.users.models.RoleDto;
+import companymanager.users.entities.Role;
+import companymanager.users.models.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -75,10 +75,10 @@ public class RoleService {
      * @return RoleDto
      */
     private RoleDto convertToDto(Role role) {
-        return new RoleDto(
-                role.getId(),
-                role.getName(),
-                role.getDescription()
-        );
+        return RoleDto.builder()
+                .id(role.getId())
+                .name(role.getName())
+                .description(role.getDescription())
+                .build();
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class UserController {
     
@@ -24,12 +23,11 @@ public class UserController {
     /**
      * POST - Register a new user
      * @param request the user registration request
-     * @return Created user with 201 status
+     * @return true if successful, false otherwise
      */
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody RegisterRequest request) {
-        UserDto createdUser = userService.registerUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    public boolean registerUser(@RequestBody RegisterRequest request) {
+        return userService.registerUser(request);
     }
     
     /**
