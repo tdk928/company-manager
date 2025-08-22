@@ -1,5 +1,5 @@
-# Railway PostgreSQL Configuration
-# Uses Railway environment variables for database connection
+# Local PostgreSQL Configuration
+# Uses local PostgreSQL database instead of Railway
 
 # Server Configuration
 server:
@@ -7,9 +7,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://yamabiko.proxy.rlwy.net:39604/railway?sslmode=require
-    username: postgres
-    password: BokcxluFKfWCwzxhdLOIDUzMWjqjeWtw
+    url: jdbc:postgresql://localhost:5432/market_mind
+    username: teodorkalev
+    password: 
     driver-class-name: org.postgresql.Driver
 
   jpa:
