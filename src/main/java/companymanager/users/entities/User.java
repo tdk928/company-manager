@@ -41,6 +41,10 @@ public class User {
     @JsonProperty("egn")
     private String egn;
     
+    @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -53,6 +57,7 @@ public class User {
         validateSecondName();
         validateLastName();
         validateEgn();
+        validatePassword();
     }
     
     private void validateFirstName() {
@@ -88,6 +93,18 @@ public class User {
         }
         if (!egn.matches("^[0-9]+$")) {
             throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR008);
+        }
+    }
+    
+    private void validatePassword() {
+        if (password == null || password.trim().isEmpty()) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR012);
+        }
+        if (password.length() < 6) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR013);
+        }
+        if (password.length() > 100) {
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR014);
         }
     }
 }

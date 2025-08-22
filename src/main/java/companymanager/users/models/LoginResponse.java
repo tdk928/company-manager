@@ -6,17 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for user registration
+ * DTO for login response
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegisterRequest {
+public class LoginResponse {
     
-    private String firstName;
-    private String secondName;
-    private String lastName;
-    private String egn;
-    private String password;
+    private String message;
+    private UserDto user;
+    private String token; // For future JWT implementation
 }

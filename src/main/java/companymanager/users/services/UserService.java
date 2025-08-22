@@ -1,6 +1,8 @@
 package companymanager.users.services;
 
 import companymanager.users.models.RegisterRequest;
+import companymanager.users.models.LoginRequest;
+import companymanager.users.models.LoginResponse;
 import companymanager.users.models.UpdateUserRequest;
 import companymanager.users.models.UserDto;
 import companymanager.users.models.RoleDto;
@@ -13,6 +15,7 @@ import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +32,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     
     /**
      * Register a new user
@@ -45,6 +49,7 @@ public class UserService {
                 .secondName(request.getSecondName())
                 .lastName(request.getLastName())
                 .egn(request.getEgn())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         
         // Validate user data
@@ -71,6 +76,36 @@ public class UserService {
         log.info("Successfully registered user with ID: {} and EGN: {}, assigned user role", savedUser.getId(), savedUser.getEgn());
         
         return convertToDto(savedUser);
+    }
+    
+    /**
+     * Login user with EGN and password
+     * @param request the login request
+     * @return LoginResponse with user details
+     */
+    public LoginResponse loginUser(LoginRequest request) {
+        log.info("Login attempt for user with EGN: {}", request.getEgn());
+        
+        // Find user by EGN
+        User user = userRepository.findByEgn(request.getEgn())
+                .orElseThrow(() -> {
+                    log.error("Login failed: User not found with EGN: {}", request.getEgn());
+                    return new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+                });
+        
+        // Verify password
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            log.error("Login failed: Invalid password for user with EGN: {}", request.getEgn());
+            throw new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+        }
+        
+        log.info("User successfully logged in with EGN: {}", request.getEgn());
+        
+        return LoginResponse.builder()
+                .message("Login successful")
+                .user(convertToDto(user))
+                .token("dummy-token") // Placeholder for future JWT implementation
+                .build();
     }
     
     /**

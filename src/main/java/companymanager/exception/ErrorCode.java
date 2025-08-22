@@ -20,6 +20,11 @@ public enum ErrorCode {
     ERR010("User not found with id: {0}"),
     ERR011("User with EGN {0} not found"),
     
+    // Password validation errors
+    ERR012("Password is required"),
+    ERR013("Password must be at least 6 characters long"),
+    ERR014("Password cannot exceed 100 characters"),
+    
     // Company validation errors
     ERR021("Company name is required"),
     ERR022("Company name cannot exceed 50 characters"),
