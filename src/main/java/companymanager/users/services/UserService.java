@@ -8,8 +8,10 @@ import companymanager.users.models.UserDto;
 import companymanager.users.models.RoleDto;
 import companymanager.users.entities.Role;
 import companymanager.users.entities.User;
+import companymanager.companies.entities.Company;
 import companymanager.users.models.RoleRepository;
 import companymanager.users.models.UserRepository;
+import companymanager.companies.models.CompanyRepository;
 import companymanager.exception.CustomResponseStatusException;
 import companymanager.exception.ErrorCode;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
     
     /**
@@ -80,11 +83,32 @@ public class UserService {
     }
     
     /**
+     * Login user with EGN or company with EIK and password
+     * @param request the login request
+     * @return LoginResponse with user/company details
+     */
+    public LoginResponse loginUser(LoginRequest request) {
+        // Check if EGN is provided (user login)
+        if (request.getEgn() != null && !request.getEgn().trim().isEmpty()) {
+            return loginUserByEgn(request);
+        }
+        // Check if EIK is provided (company login)
+        else if (request.getEik() != null && !request.getEik().trim().isEmpty()) {
+            return loginCompanyByEik(request);
+        }
+        // Neither EGN nor EIK provided
+        else {
+            log.error("Login failed: Neither EGN nor EIK provided");
+            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101, "Either EGN or EIK must be provided");
+        }
+    }
+    
+    /**
      * Login user with EGN and password
      * @param request the login request
      * @return LoginResponse with user details
      */
-    public LoginResponse loginUser(LoginRequest request) {
+    private LoginResponse loginUserByEgn(LoginRequest request) {
         log.info("Login attempt for user with EGN: {}", request.getEgn());
         
         // Find user by EGN
@@ -105,6 +129,36 @@ public class UserService {
         return LoginResponse.builder()
                 .message("Login successful")
                 .user(convertToDto(user))
+                .token("dummy-token") // Placeholder for future JWT implementation
+                .build();
+    }
+    
+    /**
+     * Login company with EIK and password
+     * @param request the login request
+     * @return LoginResponse with company details
+     */
+    private LoginResponse loginCompanyByEik(LoginRequest request) {
+        log.info("Login attempt for company with EIK: {}", request.getEik());
+        
+        // Find company by EIK
+        Company company = companyRepository.findByEik(request.getEik())
+                .orElseThrow(() -> {
+                    log.error("Login failed: Company not found with EIK: {}", request.getEik());
+                    return new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+                });
+        
+        // Verify password
+        if (!passwordEncoder.matches(request.getPassword(), company.getPassword())) {
+            log.error("Login failed: Invalid password for company with EIK: {}", request.getEik());
+            throw new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+        }
+        
+        log.info("Company successfully logged in with EIK: {}", request.getEik());
+        
+        return LoginResponse.builder()
+                .message("Company login successful")
+                .user(null) // Company login doesn't return user
                 .token("dummy-token") // Placeholder for future JWT implementation
                 .build();
     }

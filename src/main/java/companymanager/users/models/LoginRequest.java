@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for user login
+ * DTO for login (users with EGN, companies with EIK)
  */
 @Data
 @NoArgsConstructor
@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginRequest {
     
-    private String egn;
+    private String egn; // For user login
+    private String eik; // For company login
     private String password;
 }
