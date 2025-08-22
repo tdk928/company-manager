@@ -85,82 +85,83 @@ public class UserService {
     /**
      * Login user with EGN or company with EIK and password
      * @param request the login request
-     * @return LoginResponse with user/company details
+     * @return true if login successful, false otherwise
      */
-    public LoginResponse loginUser(LoginRequest request) {
-        // Check if EGN is provided (user login)
-        if (request.getEgn() != null && !request.getEgn().trim().isEmpty()) {
-            return loginUserByEgn(request);
+    public boolean loginUser(LoginRequest request) {
+        // Validate EGNOrEIK length (must be 9 or 10 characters)  
+        if (request.getEgnOrEik() == null || (request.getEgnOrEik().length() != 9 && request.getEgnOrEik().length() != 10)) {
+            log.error("Login failed: EGNOrEIK must be 9 or 10 characters, provided: {}", 
+                     request.getEgnOrEik() != null ? request.getEgnOrEik().length() : "null");
+            return false;
         }
-        // Check if EIK is provided (company login)
-        else if (request.getEik() != null && !request.getEik().trim().isEmpty()) {
-            return loginCompanyByEik(request);
+        
+        String egnOrEik = request.getEgnOrEik().trim();
+        
+        // First try to login as user (EGN)
+        try {
+            if (loginUserByEgn(egnOrEik, request.getPassword())) {
+                log.info("User successfully logged in with EGN: {}", egnOrEik);
+                return true;
+            }
+        } catch (Exception e) {
+            log.debug("User login failed for EGN: {}, trying company login", egnOrEik);
         }
-        // Neither EGN nor EIK provided
-        else {
-            log.error("Login failed: Neither EGN nor EIK provided");
-            throw new CustomResponseStatusException(HttpStatus.BAD_REQUEST, ErrorCode.ERR101, "Either EGN or EIK must be provided");
+        
+        // If user login fails, try company login (EIK)
+        try {
+            if (loginCompanyByEik(egnOrEik, request.getPassword())) {
+                log.info("Company successfully logged in with EIK: {}", egnOrEik);
+                return true;
+            }
+        } catch (Exception e) {
+            log.debug("Company login failed for EIK: {}", egnOrEik);
         }
+        
+        // Both login attempts failed
+        log.error("Login failed: Neither user nor company found with EGNOrEIK: {}", egnOrEik);
+        return false;
     }
     
     /**
      * Login user with EGN and password
-     * @param request the login request
-     * @return LoginResponse with user details
+     * @param egn the EGN
+     * @param password the password
+     * @return true if login successful, false otherwise
      */
-    private LoginResponse loginUserByEgn(LoginRequest request) {
-        log.info("Login attempt for user with EGN: {}", request.getEgn());
+    private boolean loginUserByEgn(String egn, String password) {
+        log.debug("Attempting user login with EGN: {}", egn);
         
         // Find user by EGN
-        User user = userRepository.findByEgn(request.getEgn())
-                .orElseThrow(() -> {
-                    log.error("Login failed: User not found with EGN: {}", request.getEgn());
-                    return new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
-                });
+        User user = userRepository.findByEgn(egn)
+                .orElse(null);
         
-        // Verify password
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            log.error("Login failed: Invalid password for user with EGN: {}", request.getEgn());
-            throw new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+        if (user == null) {
+            return false;
         }
         
-        log.info("User successfully logged in with EGN: {}", request.getEgn());
-        
-        return LoginResponse.builder()
-                .message("Login successful")
-                .user(convertToDto(user))
-                .token("dummy-token") // Placeholder for future JWT implementation
-                .build();
+        // Verify password
+        return passwordEncoder.matches(password, user.getPassword());
     }
     
     /**
      * Login company with EIK and password
-     * @param request the login request
-     * @return LoginResponse with company details
+     * @param eik the EIK
+     * @param password the password
+     * @return true if login successful, false otherwise
      */
-    private LoginResponse loginCompanyByEik(LoginRequest request) {
-        log.info("Login attempt for company with EIK: {}", request.getEik());
+    private boolean loginCompanyByEik(String eik, String password) {
+        log.debug("Attempting company login with EIK: {}", eik);
         
         // Find company by EIK
-        Company company = companyRepository.findByEik(request.getEik())
-                .orElseThrow(() -> {
-                    log.error("Login failed: Company not found with EIK: {}", request.getEik());
-                    return new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
-                });
+        Company company = companyRepository.findByEik(eik)
+                .orElse(null);
         
-        // Verify password
-        if (!passwordEncoder.matches(request.getPassword(), company.getPassword())) {
-            log.error("Login failed: Invalid password for company with EIK: {}", request.getEik());
-            throw new CustomResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorCode.ERR104, "Invalid credentials");
+        if (company == null) {
+            return false;
         }
         
-        log.info("Company successfully logged in with EIK: {}", request.getEik());
-        
-        return LoginResponse.builder()
-                .message("Company login successful")
-                .user(null) // Company login doesn't return user
-                .token("dummy-token") // Placeholder for future JWT implementation
-                .build();
+        // Verify password
+        return passwordEncoder.matches(password, company.getPassword());
     }
     
     /**

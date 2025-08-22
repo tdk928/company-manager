@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .contentTypeOptions(contentType -> {}) // Prevent MIME type sniffing
             )
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/api/users/register", "/api/users/login", "/api/companies/register").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(AbstractHttpConfigurer::disable) // Disable basic auth

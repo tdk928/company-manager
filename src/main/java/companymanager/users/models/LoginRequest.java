@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginRequest {
     
-    private String egn; // For user login
-    private String eik; // For company login
+    private String egnOrEik; // For user login (EGN) or company login (EIK) - must be exactly 10 characters
     private String password;
 }

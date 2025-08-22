@@ -1,15 +1,18 @@
 package companymanager.companies.services;
 
+import companymanager.companies.entities.Company;
+import companymanager.companies.models.CompanyDto;
 import companymanager.companies.models.CreateCompanyRequest;
 import companymanager.companies.models.UpdateCompanyRequest;
-import companymanager.companies.models.CompanyDto;
-import companymanager.companies.entities.Company;
 import companymanager.companies.models.CompanyRepository;
 import companymanager.exception.CustomResponseStatusException;
 import companymanager.exception.ErrorCode;
+import companymanager.users.entities.Role;
+import companymanager.users.models.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 public class CompanyService {
     
     private final CompanyRepository companyRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     
     /**
      * Get all companies
@@ -83,6 +88,17 @@ public class CompanyService {
         log.info("Creating new company with name: {}, EIK: {}", 
                 request.getName(), request.getEik());
         
+        // Get the default "company" role (ID 2)
+        Role companyRole = roleRepository.findById(2L)
+                .orElseThrow(() -> {
+                    log.error("Default company role not found");
+                    throw new CustomResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        ErrorCode.ERR100,
+                        "Default company role not found"
+                    );
+                });
+        
         // Convert request to Company entity using builder
         Company company = Company.builder()
                 .name(request.getName())
@@ -90,6 +106,8 @@ public class CompanyService {
                 .address(request.getAddress())
                 .email(request.getEmail())
                 .phone(request.getPhone())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(companyRole)
                 .build();
         
         // Validate company data
