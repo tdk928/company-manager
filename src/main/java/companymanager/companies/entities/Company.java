@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import companymanager.exception.CustomResponseStatusException;
 import companymanager.exception.ErrorCode;
+import companymanager.users.entities.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
@@ -41,6 +43,14 @@ public class Company {
     @Column(name = "phone", nullable = false)
     private String phone;
     
+    @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+    
     @Column(name = "valid_from", nullable = false)
     private LocalDate validFrom;
     
@@ -67,6 +77,7 @@ public class Company {
         validateAddress();
         validateEmail();
         validatePhone();
+        validatePassword();
     }
     
     /**
@@ -165,6 +176,34 @@ public class Company {
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.ERR032,
                 "Company phone is required"
+            );
+        }
+    }
+    
+    /**
+     * Validate company password
+     * @throws CustomResponseStatusException if password is invalid
+     */
+    private void validatePassword() {
+        if (password == null || password.trim().isEmpty()) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR012,
+                "Password is required"
+            );
+        }
+        if (password.length() < 6) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR013,
+                "Password must be at least 6 characters long"
+            );
+        }
+        if (password.length() > 100) {
+            throw new CustomResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.ERR014,
+                "Password cannot exceed 100 characters"
             );
         }
     }
