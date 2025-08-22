@@ -1,9 +1,10 @@
-package companymanager.admin.controllers;
+package companymanager.users.controllers;
 
-import companymanager.users.models.UpdateUserRequest;
+import companymanager.users.models.RegisterRequest;
 import companymanager.users.models.UserDto;
 import companymanager.users.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,15 +12,26 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST Controller for Admin operations
+ * REST Controller for User operations
  */
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
-public class AdminController {
+public class UserController {
     
     private final UserService userService;
+    
+    /**
+     * POST - Register a new user
+     * @param request the user registration request
+     * @return Created user with 201 status
+     */
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody RegisterRequest request) {
+        UserDto createdUser = userService.registerUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
     
     /**
      * GET - Retrieve all users
@@ -53,29 +65,6 @@ public class AdminController {
         Optional<UserDto> user = userService.getUserByEgn(egn);
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-    
-    /**
-     * PUT - Update an existing user
-     * @param id the user ID
-     * @param request the update request
-     * @return Updated user if successful, 404 if not found
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest request) {
-        UserDto updatedUser = userService.updateUser(id, request);
-        return ResponseEntity.ok(updatedUser);
-    }
-    
-    /**
-     * DELETE - Delete a user
-     * @param id the user ID
-     * @return 204 No Content if successful, 404 if not found
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
     }
     
     /**
