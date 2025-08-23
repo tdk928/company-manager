@@ -8,8 +8,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/market_mind
-    username: teodorkalev
-    password: 
+    username: tdk928
+    password: tdk55
     driver-class-name: org.postgresql.Driver
 
   jpa:
