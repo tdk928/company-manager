@@ -1,36 +1,42 @@
 -- Insert multiple companies into the companies table
--- This script inserts Kaufland, Lidl, and Billa companies
+-- This script inserts Kaufland, Lidl, and Billa companies with passwords and roles
 
 -- Insert Kaufland company
-INSERT INTO companies (name, eik, address, email, phone, valid_from) 
+INSERT INTO companies (name, eik, address, email, phone, password, role_id, valid_from) 
 VALUES (
     'Kaufland',
     '131129282',
     'ул. Скопие № 1А',
     'info@kaufland.bg',
     '0800  12 220',
+    '$2a$12$default.hash.for.existing.companies',
+    2,
     CURRENT_DATE
 ) ON CONFLICT (eik) DO NOTHING;
 
 -- Insert Lidl company
-INSERT INTO companies (name, eik, address, email, phone, valid_from) 
+INSERT INTO companies (name, eik, address, email, phone, password, role_id, valid_from) 
 VALUES (
     'Lidl',
     '131071587',
     'с. Равно поле, ул. "3-ти Март"',
     'info@lidl.bg',
     '+359 876046967',
+    '$2a$12$default.hash.for.existing.companies',
+    2,
     CURRENT_DATE
 ) ON CONFLICT (eik) DO NOTHING;
 
 -- Insert Billa company
-INSERT INTO companies (name, eik, address, email, phone, valid_from) 
+INSERT INTO companies (name, eik, address, email, phone, password, role_id, valid_from) 
 VALUES (
     'Billa',
     '130007884',
     'бул. БЪЛГАРИЯ № 55',
     'info@billa.bg',
     '+359 2 8188 222',
+    '$2a$12$default.hash.for.existing.companies',
+    2,
     CURRENT_DATE
 ) ON CONFLICT (eik) DO NOTHING;
 
